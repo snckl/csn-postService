@@ -32,7 +32,7 @@ public class PostController {
                 .status(HttpStatus.FOUND)
                 .body(postDto);
     }
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto> deletePost(@PathVariable("id") Long id){
         postService.deletePost(id);
         return ResponseEntity
