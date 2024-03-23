@@ -36,6 +36,11 @@ public class PostService {
     }
 
     public void deletePost(Long id){
-         postRepository.deleteById(id);
+        Optional<Post> post = postRepository.findById(id);
+        if(post.isPresent()){
+            postRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("post","id",id.toString());
+        }
     }
 }

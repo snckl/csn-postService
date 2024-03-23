@@ -1,11 +1,16 @@
 package com.csn.postservice.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
+@Schema(
+        name = "Error Response",
+        description = "Schema which hold error response"
+)
 @Data@AllArgsConstructor
 public class ErrorResponseDto {
     private String apiPath;
