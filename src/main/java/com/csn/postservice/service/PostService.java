@@ -4,6 +4,8 @@ import com.csn.postservice.dto.PostDto;
 import com.csn.postservice.entity.Post;
 import com.csn.postservice.exception.ResourceNotFoundException;
 import com.csn.postservice.repository.PostRepository;
+import com.csn.postservice.service.client.CommentFeignClient;
+import com.csn.postservice.service.client.StorageFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ import java.util.Optional;
 @Slf4j
 public class PostService {
     private final PostRepository postRepository;
+    private final CommentFeignClient commentFeignClient;
+    private final StorageFeignClient storageFeignClient;
+
 
     public void createPost(PostDto postDto){
         Post post = Post.builder()
@@ -29,10 +34,9 @@ public class PostService {
         Optional<Post> post = postRepository.findById(id);
 
         if(post.isPresent()){
-            PostDto postDto = PostDto.builder()
+            return PostDto.builder()
                     .title(post.get().getTitle())
                     .textContent(post.get().getTextContent()).build();
-            return postDto;
         }
 
         throw new ResourceNotFoundException("Post","id",id.toString());
