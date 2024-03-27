@@ -1,5 +1,6 @@
 package com.csn.postservice.controller;
 
+import com.csn.postservice.dto.DetailedPostDto;
 import com.csn.postservice.dto.PostDto;
 import com.csn.postservice.dto.ResponseDto;
 import com.csn.postservice.dto.StorageDto;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(
         name = "CRUD API for post service of CSN",
@@ -51,12 +53,12 @@ public class PostController {
             description = "HTTP Status OK"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> fetchPost(@PathVariable("id") Long id){
+    public ResponseEntity<DetailedPostDto> fetchPost(@PathVariable("id") Long id){
 
-        PostDto postDto = postService.fetchPost(id);
+        DetailedPostDto detailedPostDto = postService.fetchPost(id);
         return ResponseEntity
                 .status(HttpStatus.FOUND)
-                .body(postDto);
+                .body(detailedPostDto);
     }
 
     @Operation(summary = "Delete post REST API",

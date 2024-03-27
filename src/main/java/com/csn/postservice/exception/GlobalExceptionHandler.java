@@ -51,6 +51,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(MaxImageSizeExceededException.class)
+    public ResponseEntity<ErrorResponseDto> handleMaxImageSizeExceededException(MaxImageSizeExceededException exception,
+                                                                                WebRequest webRequest){
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception exception, WebRequest webRequest){
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(

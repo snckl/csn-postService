@@ -7,20 +7,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 
 @Schema(
         name="Post",
-        description =  "Post schema which holds the post information of the user"
+        description =  "Post schema which holds the post comment and storage information of the user"
 )
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostDto {
-    @NotBlank(message = "Post context should be provided")
+public class DetailedPostDto {
     private String title;
-    @NotBlank(message = "Post context should be provided")
     private String textContent;
+    @Nullable
+    private List<CommentDto> commentDto;
+    @Nullable
+    private StorageDto storageDto;
 }

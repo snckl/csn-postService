@@ -18,13 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class StorageDto {
-    @NotNull(message = "Post ID cannot be null")
     private Long postId;
-    @NotBlank(message = "File name cannot be blank")
     private String filename;
-    @NotBlank(message = "File type cannot be blank")
     private String type;
-    @Lob
-    @NotBlank(message = "Content must be provided")
     private byte[] content;
 }
