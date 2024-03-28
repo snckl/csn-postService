@@ -2,6 +2,7 @@ package com.csn.postservice.service.client;
 
 import com.csn.postservice.dto.CommentDto;
 import com.csn.postservice.dto.ResponseDto;
+import com.csn.postservice.service.feignFallback.CommentFeignClientFallBack;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient("comment-service")
+@FeignClient(value = "comment-service",fallback = CommentFeignClientFallBack.class)
 public interface CommentFeignClient {
 
     @GetMapping(value = "/api/v1/comment/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
