@@ -10,6 +10,7 @@ import com.csn.postservice.service.client.StorageFeignClient;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,9 @@ import java.util.Optional;
 @Slf4j
 public class PostService {
     private final PostRepository postRepository;
+    @Qualifier("com.csn.postservice.service.client.CommentFeignClient")
     private final CommentFeignClient commentFeignClient;
+    @Qualifier("com.csn.postservice.service.client.StorageFeignClient")
     private final StorageFeignClient storageFeignClient;
 
 
@@ -47,10 +50,8 @@ public class PostService {
             StorageDto storageDto = storageFeignClient.fetchImage(id).getBody();
             List<CommentDto> commentDto = commentFeignClient.fetchComment(id).getBody();
 
-
-
             detailedPostDto.setCommentDto(commentDto);
-            // detailedPostDto.setStorageDto(storageDto);
+            detailedPostDto.setStorageDto(storageDto);
 
             return detailedPostDto;
         }
@@ -62,6 +63,8 @@ public class PostService {
         Optional<Post> post = postRepository.findById(id);
         if(post.isPresent()){
             postRepository.deleteById(id);
+            storageFeignClient.deleteImage(id);
+            commentFeignClient.deleteAllComments(id);
             log.info("Post deleted with id of {}",id);
         } else {
             throw new ResourceNotFoundException("post","id",id.toString());
