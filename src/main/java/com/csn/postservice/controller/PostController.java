@@ -3,7 +3,6 @@ package com.csn.postservice.controller;
 import com.csn.postservice.dto.DetailedPostDto;
 import com.csn.postservice.dto.PostDto;
 import com.csn.postservice.dto.ResponseDto;
-import com.csn.postservice.dto.StorageDto;
 import com.csn.postservice.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,20 +10,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.protocol.ResponseServer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(
         name = "CRUD API for post service of CSN",
         description = "Create fetch delete for post details"
 )
 @RestController
-@RequestMapping(path = "/api/v1/post",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1",produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Validated
 public class PostController {

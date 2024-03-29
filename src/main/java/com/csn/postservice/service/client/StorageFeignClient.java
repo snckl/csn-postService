@@ -12,12 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @FeignClient(value = "storage-service",fallback = StorageFeignClientFallBack.class)
 public interface StorageFeignClient {
-    @PostMapping(value = "/api/v1/storage/p/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/api/v1/p/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDto> saveImage(@RequestPart("content") MultipartFile image, @PathVariable("id") Long id);
 
-    @GetMapping(value = "/api/v1/storage/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/v1/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StorageDto> fetchImage(@PathVariable("id") Long id);
 
-    @DeleteMapping(value = "/api/v1/storage/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/api/v1/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> deleteImage(@PathVariable("id") Long id);
 }

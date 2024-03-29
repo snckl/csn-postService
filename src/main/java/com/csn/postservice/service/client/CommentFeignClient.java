@@ -14,12 +14,12 @@ import java.util.List;
 @FeignClient(value = "comment-service",fallback = CommentFeignClientFallBack.class)
 public interface CommentFeignClient {
 
-    @GetMapping(value = "/api/v1/comment/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/v1/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CommentDto>> fetchComment(@PathVariable("id") Long id);
 
-    @PostMapping(value = "/api/v1/comment",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/v1",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> createComment(@Valid @RequestBody CommentDto comment);
 
-    @DeleteMapping(value = "/api/v1/comment/p/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/api/v1/p/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> deleteAllComments(@PathVariable("id") Long id);
 }
