@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class CommentFeignClientFallBack implements CommentFeignClient {
     @Override
-    public ResponseEntity<List<CommentDto>> fetchComment(Long id) {
+    public ResponseEntity<List<CommentDto>> fetchComment(Long id,String correlationId) {
         return null;
     }
 

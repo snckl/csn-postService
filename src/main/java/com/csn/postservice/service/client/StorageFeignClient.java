@@ -16,7 +16,7 @@ public interface StorageFeignClient {
     public ResponseEntity<ResponseDto> saveImage(@RequestPart("content") MultipartFile image, @PathVariable("id") Long id);
 
     @GetMapping(value = "/api/v1/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StorageDto> fetchImage(@PathVariable("id") Long id);
+    public ResponseEntity<StorageDto> fetchImage(@PathVariable("id") Long id,@RequestHeader("csn-correlation-id") String correlationId);
 
     @DeleteMapping(value = "/api/v1/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> deleteImage(@PathVariable("id") Long id);

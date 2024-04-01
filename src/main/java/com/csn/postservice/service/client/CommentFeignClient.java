@@ -1,8 +1,8 @@
 package com.csn.postservice.service.client;
 
+import com.csn.postservice.service.feignFallback.CommentFeignClientFallBack;
 import com.csn.postservice.dto.CommentDto;
 import com.csn.postservice.dto.ResponseDto;
-import com.csn.postservice.service.feignFallback.CommentFeignClientFallBack;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -15,7 +15,7 @@ import java.util.List;
 public interface CommentFeignClient {
 
     @GetMapping(value = "/api/v1/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CommentDto>> fetchComment(@PathVariable("id") Long id);
+    public ResponseEntity<List<CommentDto>> fetchComment(@PathVariable("id") Long id,@RequestHeader("csn-correlation-id") String correlationId);
 
     @PostMapping(value = "/api/v1",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> createComment(@Valid @RequestBody CommentDto comment);

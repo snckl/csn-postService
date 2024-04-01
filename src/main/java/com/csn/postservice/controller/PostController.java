@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/v1",produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class PostController {
     private final PostService postService;
 
@@ -37,6 +39,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<ResponseDto> createPost(@Valid @RequestBody PostDto postDto){
         postService.createPost(postDto);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto("201","Post created successfully"));
@@ -50,9 +53,9 @@ public class PostController {
             description = "HTTP Status OK"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<DetailedPostDto> fetchPost(@PathVariable("id") Long id){
-
-        DetailedPostDto detailedPostDto = postService.fetchPost(id);
+    public ResponseEntity<DetailedPostDto> fetchPost(@PathVariable("id") Long id,@RequestHeader("csn-correlation-id") String correlationId){
+        log.debug("csn-correlation-id found: {}",correlationId);
+        DetailedPostDto detailedPostDto = postService.fetchPost(id,correlationId);
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(detailedPostDto);

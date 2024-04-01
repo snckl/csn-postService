@@ -1,20 +1,18 @@
 package com.csn.postservice.service;
 
-import com.csn.postservice.dto.*;
+import com.csn.postservice.dto.CommentDto;
+import com.csn.postservice.dto.DetailedPostDto;
+import com.csn.postservice.dto.PostDto;
+import com.csn.postservice.dto.StorageDto;
 import com.csn.postservice.entity.Post;
-import com.csn.postservice.exception.MaxImageSizeExceededException;
 import com.csn.postservice.exception.ResourceNotFoundException;
 import com.csn.postservice.repository.PostRepository;
 import com.csn.postservice.service.client.CommentFeignClient;
 import com.csn.postservice.service.client.StorageFeignClient;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +37,7 @@ public class PostService {
         log.info("Post created with id of {}",createdPost.getId());
     }
 
-    public DetailedPostDto fetchPost(Long id){
+    public DetailedPostDto fetchPost(Long id,String correlationId){
         Optional<Post> post = postRepository.findById(id);
 
         if(post.isPresent()){
@@ -47,8 +45,8 @@ public class PostService {
                     .title(post.get().getTitle())
                     .textContent(post.get().getTextContent()).build();
 
-            StorageDto storageDto = storageFeignClient.fetchImage(id).getBody();
-            List<CommentDto> commentDto = commentFeignClient.fetchComment(id).getBody();
+            StorageDto storageDto = storageFeignClient.fetchImage(id,correlationId).getBody();
+            List<CommentDto> commentDto = commentFeignClient.fetchComment(id,correlationId).getBody();
 
             detailedPostDto.setCommentDto(commentDto);
             detailedPostDto.setStorageDto(storageDto);
