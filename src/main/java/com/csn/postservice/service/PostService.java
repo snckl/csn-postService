@@ -12,6 +12,7 @@ import com.csn.postservice.service.client.StorageFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,12 +46,14 @@ public class PostService {
                     .title(post.get().getTitle())
                     .textContent(post.get().getTextContent()).build();
 
-            StorageDto storageDto = storageFeignClient.fetchImage(id,correlationId).getBody();
-            List<CommentDto> commentDto = commentFeignClient.fetchComment(id,correlationId).getBody();
-
-            detailedPostDto.setCommentDto(commentDto);
-            detailedPostDto.setStorageDto(storageDto);
-
+            ResponseEntity<StorageDto> storageDto = storageFeignClient.fetchImage(id,correlationId);
+            ResponseEntity<List<CommentDto>> commentDto = commentFeignClient.fetchComment(id,correlationId);
+            if(storageDto != null && storageDto.hasBody()){
+                detailedPostDto.setStorageDto(storageDto.getBody());
+            }
+            if(commentDto != null && commentDto.hasBody()){
+                detailedPostDto.setCommentDto(commentDto.getBody());
+            }
             return detailedPostDto;
         }
 
