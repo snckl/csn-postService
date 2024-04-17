@@ -1,9 +1,6 @@
 package com.csn.postservice.service;
 
-import com.csn.postservice.dto.CommentDto;
-import com.csn.postservice.dto.DetailedPostDto;
-import com.csn.postservice.dto.PostDto;
-import com.csn.postservice.dto.StorageDto;
+import com.csn.postservice.dto.*;
 import com.csn.postservice.entity.Post;
 import com.csn.postservice.exception.ResourceNotFoundException;
 import com.csn.postservice.repository.PostRepository;
@@ -12,6 +9,7 @@ import com.csn.postservice.service.client.StorageFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +25,7 @@ public class PostService {
     private final CommentFeignClient commentFeignClient;
     @Qualifier("com.csn.postservice.service.client.StorageFeignClient")
     private final StorageFeignClient storageFeignClient;
+    private final StreamBridge streamBridge;
 
 
     public void createPost(PostDto postDto){
@@ -35,6 +34,7 @@ public class PostService {
                 .textContent(postDto.getTextContent())
                 .build();
         Post createdPost = postRepository.save(post);
+        sendCommunication(post);
         log.info("Post created with id of {}",createdPost.getId());
     }
 
@@ -70,5 +70,12 @@ public class PostService {
         } else {
             throw new ResourceNotFoundException("post","id",id.toString());
         }
+    }
+
+    private void sendCommunication(Post post){
+        var postMessageDto = new PostMessageDto(post.getTitle(),post.getTextContent());
+        log.info("Sending communication request for the details : {}",postMessageDto);
+        var result =  streamBridge.send("sendCommunication-out-0",postMessageDto);
+        log.info("Is the Communication request successfully processed: {}",result);
     }
 }
